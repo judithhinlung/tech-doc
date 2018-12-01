@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Quick Start Guide to Using Ruby's Enumerable Module</title>
+  <script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script>
+  <link rel="stylesheet"  href="style.css">
+</head>
+
+<body translate="no">  
+<header>Quick Start Guide to Ruby's Enumerable Module</header>
+<nav id="navbar">
+  <ul> 
+    <li><a class="nav-link" href="#Introduction">Introduction</a></li>
+    <li><a class="nav-link" href="#Each">Each and Each_with_index</a></li>
+    <li><a class="nav-link" href="#Select">Select and reject</a></li>
+    <li><a class="nav-link" href="#Map">Map and Collect</a></li>
+    <li><a class="nav-link" href="#all">All?, None?, and Any?</a></li>
+    <li><a class="nav-link" href="#Inject">Inject</a></li>
+    <li><a class="nav-link" href="#Bonus">Bonus</a></li>
+    <li><a class="nav-link" href="#Conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+<main id="main-doc">
+  <section class="main-section" id="Introduction">
+    <header>Introduction</header>
+    <article>  
+      <p>The Enumerable module in Ruby contains a special collection of methods for hash and array classes.  In this guide, we will briefly discuss some of the most common  methods in the module and how to use them.  In addition, the bonus section at the end of this guide will give you a couple tips on how to write your own enumerable methods.</p>
+    </article></section>
+  <section class="main-section" id="Each">
+    <header>Each and Each_with_index</header>
+      <p>The each method passes each element of an array to the block you specified, using the format <code>each { |obj| block }</code>.  The method returns the original collection that it was called on.</p>
+      <p>Example:<br>
+         The following code displays each element of an array on a separate line.
+         <pre><code>[1, 2, 3].each { |x| puts x }  #=&gt;   
+            1
+            2
+            3
+          </code></pre>
+      <p>A related method is each_with_index, which takes both the object and its index as arguments and pass them through the block you specified.</p>
+      <p>Example:<br>
+          The following code displays each element whose index is odd.</p>
+        <pre><code>fruits.each_with_index { |item, index| print "{#item}" if index%2 != 0 }  #=&gt; 
+        [Apple, Orange]</code></pre>
+    </section>
+  <section class="main-section" id="Select">
+    <header>Select and Reject</header>
+      <p>The select method returns an array with elements for which the given block returns true.</p>
+      <p>Example:<br>
+        The following code returns a new array with the even numbers from the original array.</p>
+<pre><code>my_array.select { |num| num%2 == 0 }  #=&gt; [2, 4, 6, 8]
+        </code></pre>
+      <p>A related method is reject, which  is basically the opposite of select.  Reject returns a new array with elements from the original for which the given block returns false.</p>
+      <p>Example:<br>
+      The following code returns an array containing only odd numbers.</p>
+        <pre><code>my_array = [1, 2, 3, 4, 5, 6, 7, 8]
+          my_array.reject { |num| num%2 == 0 }   #=&gt; [1, 3, 5, 7]
+        </code></pre>
+    </section>
+  <section class="main-section" id="Map">
+    <header>Map and Collect</header>
+<p>The map and collect methods have the same function, they return a new array containing the results of elements modified by the given block.,/p>
+      <p>Example:<br>
+        The following code returns an array with numbers 1-10 multiplied by 2.<p>
+        <pre><code>1..10.map { |i| i * i }   #=&gt; [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
+        </code></pre>
+    </section>
+  <section class="main-secttion" id="All">
+    <header>All? None? and Map and Collect</header>
+      <p>The all? method returns true when all array satisfies the given condition.</p>
+<p>Example:<br>
+        Returns true if all numbers are less than 1.</p>
+        <pre><code>1..4.all? { |num| num &lt; 10 }  #=&gt; true
+        </code></pre>
+      <p>The none? method returns true if none of the elements in the array satisfies the given condition.</p>
+
+      <p>Example:<br>
+        Returns true if no number is greater than 10.</p>
+        <pre><code>1..4.none? { |num| num &gt; 10 }  #=&gt; true
+        </code></pre>
+<p>The any? method returns true if any of the elements satisfies the given condition.</p>
+<p>Example:<br>
+Returns true if the array contains even numbers.</p>
+<pre><code>1..4.any? { |x| x &lt;= 0 }  #=&gt; true
+        </code></pre>
+    </section>
+
+  <section class="main-section" id="Inject">
+    <header>The Inject and Reduce Methods</header>
+      <p>Just like the collect and map methods, the inject and reduce methods have the same function.  They gather up the elements of an array into a single value based on some pattern.  In each iteration, the current element and an accumulator value is passed to the block. If you specify a symbol, such as (+, -, *, /, etc.), the accumulator value and the current element will be passed to  a method that returns the result of the accumulator and the current element modified by the symbol.  This value then becomes the new value of the accumulator. To specify an initial value, place it in parentheses before the block, otherwise the first value will be used as the initial value.</p>
+      <p>Example:<br>
+        Returns the result of adding numbers one thru 8.</p>
+        <pre><code>
+          1..8.inject(0) { |total, item| total + item }  #=&gt; 45
+        </code></pre>
+    </section>
+  <section class="main-section" id="Bonus">
+    <header>Bonus: Tips on creating your own Enumerable methods</header>
+    <article>
+      <p>The yield keyword.  All the methods we discussed so far rely on the method 'each' to bring out each element in an array, in order for other methods to display, select, or modify those that fit certain criteria. For 'each' and all the other methods that require passing code to blocks, the yield keyword is crucial.  In short, yield tells the program when to call the block and pass the current object to it.</p>
+      <p>Example:<br>
+        <p>This is an implementation of the each method, called my_each.</p>
+        <pre><code>
+def my_each
+  i = 0
+  while i &lt; self.size do
+    yield(self[i])
+    i += 1
+  end
+  self
+end
+        </code></pre>
+      <p>The &block.  Although blocks are very useful, they don't have names, which limits us to running it once through each iteration.  If we want to be able to call a block whenever we want, the &block gives us a way to do so.   The &block allows us to capture our block into a callback that we can then pass to a method.</p>
+        <p>Example<br>
+        In the following implementation of my_inject, the previous result for each iteration is retrieved through a callback to block.  This value, along with the current element, is then passed to the block and the result is updated.</p>
+        <pre><code>
+def my_inject(result = nil, &block)
+  accumulator = 0 if accumulator == nil
+  result = self[accumulator]
+  i = accumulator + 1
+  while i &lt; self.size  do
+    result = block.call(result, self[i])
+    i += 1
+  end
+  result
+end
+        </code></pre>
+    </article></section>
+  <section class="main-section" id="Conclusion">
+    <header>Conclusion and Further Reading</header>
+      <p>As we have seen, the Enumerable module is filled with many useful methods.  Some of those we have not cover include
+        <ul>
+          <li><a href="https://ruby-doc.org/core-2.5.1/Enumerable.html#method-i-find">find</a>, <a href="https://ruby-doc.org/core-2.5.1/Enumerable.html#method-i-find_all">find_all</a>, and <a href="https://ruby-doc.org/core-2.5.1/Enumerable.html#method-i-find_index">find_index</a></li>
+          <li><a href="">flat_map</a></li>
+          <li><a href="https://ruby-doc.org/core-2.5.1/Enumerable.html#method-i-flat_map">group_by</a></li>
+          <li><a href="https://ruby-doc.org/core-2.5.1/Enumerable.html#method-i-include-3F">include?</a> and <a href="https://ruby-doc.org/core-2.5.1/Enumerable.html#method-i-member-3F">member?</a></li>
+          <li><a href="https://ruby-doc.org/core-2.5.1/Enumerable.html#method-i-minmax">minmax></a></li>
+          <li><a href="https://ruby-doc.org/core-2.5.1/Enumerable.html#method-i-sort">sort</a></li>
+        </ul>
+      </p>
+
+      <p>According to the <a href="https://ruby-doc.org/core-2.5.1/Enumerable.html">documentation</a> for Ruby 2.5.1, there are 55 methods in Enumerable.  If you have time, definitely check them out!</p>
+    </section>
+  </main>
+</body>
+</html>
